@@ -30,7 +30,7 @@ function login(username, password){
     throw { status: 401, message: "Unauthorized!"};
   })
   .then(function() {
-    delete data.password;
+    delete user.password;
     return user;
   })
 }
