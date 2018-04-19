@@ -25,7 +25,24 @@ function getOneByUserName(username){
 //////////////////////////////////////////////////////////////////////////////
 
 function create(username, password){
+  return getOneByUserName(username)
+  .then(function(data) {
+    if (data)
+      throw { status: 400, message: 'User name already exists'}
 
+      return bcrypt.hash(password, 10)
+  })
+  .then(function(hashedPassword){
+    return (
+      db('users')
+      .insert({username, password: hashedPassword})
+      .returning('*') 
+    )
+  })
+  .then(function([data]) {
+    delete data.password
+    return data
+  })
 
 }
 
