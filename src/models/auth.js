@@ -18,7 +18,21 @@ const userModel = require('./users')
 //////////////////////////////////////////////////////////////////////////////
 
 function login(username, password){
+  let user;
 
+  return userModel.getOneByUserName(username)
+  .then(function(data) {
+    if(!data) throw { status: 400, message: "Bad request"};
+    user = data;
+    return bcrypt.compare(password, user.password);
+  })
+  .catch(bcrypt.MISMATCH_ERROR, function() {
+    throw { status: 401, message: "Unauthorized!"};
+  })
+  .then(function() {
+    delete data.password;
+    return user;
+  })
 }
 
 module.exports = {
