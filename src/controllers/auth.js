@@ -16,10 +16,10 @@ const jwt = require('jsonwebtoken')
 //////////////////////////////////////////////////////////////////////////////
 
 function login(req, res, next){
-  if (!req.params.username) {
+  if (!req.body.username) {
     throw { status: 400, message: "Name requared!"};
   }
-  if (!req.params.password) {
+  if (!req.body.password) {
     throw { status: 400, message: "Password requared!"};
   }
   const user = authModel.login(req.params.name, req.params.password)
