@@ -16,16 +16,18 @@ const jwt = require('jsonwebtoken')
 //////////////////////////////////////////////////////////////////////////////
 
 function login(req, res, next){
-  if (!req.params.name) {
-    throw { status: 400, message: "Name requared!"}
+  if (!req.params.username) {
+    throw { status: 400, message: "Name requared!"};
   }
   if (!req.params.password) {
-    throw { status: 400, message: "Password requared!"}
+    throw { status: 400, message: "Password requared!"};
   }
-  const user = authModel.login(req.params.name, req.params.password);
-
-  if (user.id) 
-
+  const user = authModel.login(req.params.name, req.params.password)
+  .then(function(user){
+    const token = jwt.sign({id: user.id}, process.env.SECRET);
+    return res.status(200).send({ token });
+  })
+  .catch(next);
 }
 
 //////////////////////////////////////////////////////////////////////////////
