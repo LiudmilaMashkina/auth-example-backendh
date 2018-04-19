@@ -17,12 +17,13 @@ const jwt = require('jsonwebtoken')
 
 function login(req, res, next){
   if (!req.body.username) {
-    throw { status: 400, message: "Name requared!"};
+    throw { status: 400, message: "Name requared!"}; /// return next()?
   }
   if (!req.body.password) {
     throw { status: 400, message: "Password requared!"};
   }
-  const user = authModel.login(req.params.name, req.params.password)
+  
+  authModel.login(req.params.name, req.params.password)
   .then(function(user){
     const token = jwt.sign({id: user.id}, process.env.SECRET);
     return res.status(200).send({ token });
